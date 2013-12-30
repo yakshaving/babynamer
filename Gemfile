@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+
 gem 'rails', '4.0.2'
+gem 'haml-rails'
 gem 'sqlite3'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
@@ -14,11 +15,24 @@ gem 'haml-rails'
 gem 'high_voltage'
 gem 'simple_form'
 gem 'thin'
+gem 'bson_ext'
+gem 'bourbon'
+gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
+gem 'nokogiri' # scraping names (rake tasks)
+
+
 group :development do
   gem 'better_errors'
+  gem 'byebug'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
   gem 'guard-bundler'
   gem 'guard-rails'
+
+  gem "guard", ">= 1.0.0"
+  gem "guard-shell"
+  gem "guard-coffeescript", ">= 0.4.0"
+  gem "guard-livereload", ">= 0.4.0"
+
   gem 'html2haml'
   gem 'hub', :require=>nil
   gem 'quiet_assets'
