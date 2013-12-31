@@ -3,6 +3,7 @@ require 'mongoid'
 require 'nokogiri'
 require 'open-uri'
 require 'typhoeus'
+require 'byebug'
 
 
 namespace :load_data do
@@ -13,7 +14,7 @@ namespace :load_data do
     # number of entries
     numentries = 200
 
-    (674..170022).step(numentries).each do |startIndex|
+    (1..170022).step(numentries).each do |startIndex|
       # select imports
       url = "http://www.babycenter.com/babyNamerSearch.htm?startIndex=" + startIndex.to_s + "&search=true&batchSize=" + numentries.to_s + "&simplesearch=true"
 
@@ -21,7 +22,7 @@ namespace :load_data do
 
       puts "//////////////////    Opened babycenter main link  ////////////////////////"
 
-      for i in (1..numentries).step(5)
+      for i in (1..numentries*5).step(5)
         # create a master hash for all names
 
         babyname = {}
@@ -37,27 +38,31 @@ namespace :load_data do
         # hydra = Typhoeus::Hydra.hydra
         # hydra.queue(request)
 
-        nameHTML = Nokogiri::HTML(open(innerURL))
-        nameHTML.css('.babyNameBasicInfo').text.split(';').each do |entry|
-          eSplit = entry.split(":")
-          e = eSplit[0].strip.gsub("\n",'').gsub("\u00A0", "").downcase
+        nameHTML = Nokogiri::HTML(open(innerURL)).css('.babyNameBasicInfo').text.gsub("\n","")
 
-          result = (eSplit[1].strip.downcase.include? "if you have information")? "" : eSplit[1].strip.downcase
-          babyname[e] = result
-        end
+        gender = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,2].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
+
+        babyname["gender"] = gender.include?("have information") ? "" : gender
+
+        origin = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,6].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
+        babyname["origin"] = origin.include?("have information") ? "" : origin
+
+        meaning = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,10].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
+        babyname["meaning"] = meaning.include?("have information") ? "" : meaning
 
         new_name = Babyname.create(name: babyname["name"], gender: babyname["gender"], origin: babyname["origin"], meaning: babyname["meaning"])
 
-        new_name.upsert
-
         # debug
-        puts "[   index ] " + startIndex.to_s
+        puts "[   index ] " + startIndex.to_s + " // " + i.to_s
         puts "[    name ] " + babyname["name"]
         puts "[  gender ] " + babyname["gender"]
         puts "[  origin ] " + babyname["origin"]
         puts "[ meaning ] " + babyname["meaning"]
         puts "-----------------------------------------------"
         puts "\n"
+
+        # add the item to the db
+        new_name.upsert
 
       end
 
