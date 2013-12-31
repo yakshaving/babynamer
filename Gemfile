@@ -19,7 +19,7 @@ gem 'bson_ext'
 gem 'bourbon'
 gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
 gem 'nokogiri' # scraping names (rake tasks)
-
+gem 'typhoeus'
 
 group :development do
   gem 'better_errors'
