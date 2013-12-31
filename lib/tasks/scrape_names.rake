@@ -2,7 +2,6 @@ require 'rubygems'
 require 'mongoid'
 require 'nokogiri'
 require 'open-uri'
-require 'typhoeus'
 
 namespace :load_data do
 
@@ -31,11 +30,6 @@ namespace :load_data do
         # grabbing the URL
         innerURL = doc.css('table')[8].css('tr td')[i].css('a')[0]["href"]
 
-        # using https://github.com/typhoeus/typhoeus to manage threading
-        # request = Typhoeus::Request.new(innerURL)
-        # hydra = Typhoeus::Hydra.hydra
-        # hydra.queue(request)
-
         nameHTML = Nokogiri::HTML(open(innerURL)).css('.babyNameBasicInfo').text.gsub("\n","")
 
         gender = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,2].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
@@ -45,10 +39,8 @@ namespace :load_data do
         origin = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,6].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
         babyname["origin"] = origin.include?("have information") ? "" : origin
 
-        meaning = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,10].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
+        meaning = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,9].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
         babyname["meaning"] = meaning.include?("have information") ? "" : meaning
-
-        new_name = Babyname.create(name: babyname["name"], gender: babyname["gender"], origin: babyname["origin"], meaning: babyname["meaning"])
 
         # debug
         puts "[   index ] " + startIndex.to_s + " // " + i.to_s
@@ -60,7 +52,7 @@ namespace :load_data do
         puts "\n"
 
         # add the item to the db
-        new_name.upsert
+        Babyname.create(name: babyname["name"], gender: babyname["gender"], origin: babyname["origin"], meaning: babyname["meaning"])
 
       end
 

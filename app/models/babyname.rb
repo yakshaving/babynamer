@@ -6,7 +6,7 @@ class Babyname
   field :gender, type: String
 
   validates_presence_of :name, :gender
-  validates_uniqueness_of :name, {message: "Baby names must be unique"}
+  validates_uniqueness_of :name, :scope => :gender
 
-  index({name: 1}, {unique: true, name: "name_index"})
+  # index({name: 1}, {unique: true, name: "name_index"})
 end
