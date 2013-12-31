@@ -3,8 +3,6 @@ require 'mongoid'
 require 'nokogiri'
 require 'open-uri'
 require 'typhoeus'
-require 'byebug'
-
 
 namespace :load_data do
 
