@@ -11,7 +11,7 @@ namespace :load_data do
     # number of entries
     numentries = 200
 
-    (1..170022).step(numentries).each do |startIndex|
+    (10601..170022).step(numentries).each do |startIndex|
       # select imports
       url = "http://www.babycenter.com/babyNamerSearch.htm?startIndex=" + startIndex.to_s + "&search=true&batchSize=" + numentries.to_s + "&simplesearch=true"
 
@@ -30,7 +30,12 @@ namespace :load_data do
         # grabbing the URL
         innerURL = doc.css('table')[8].css('tr td')[i].css('a')[0]["href"]
 
-        nameHTML = Nokogiri::HTML(open(innerURL)).css('.babyNameBasicInfo').text.gsub("\n","")
+        begin
+          nameHTML = Nokogiri::HTML(open(innerURL)).css('.babyNameBasicInfo').text.gsub("\n","")
+        rescue OpenURI::HTTPError => ex
+          puts "Error fetching page: " + innerURL.to_s + " // Exception: " + ex.message
+          next # iterate through the next element
+        end
 
         gender = nameHTML[/Gender:(\s)*((.)*)(;)*Origin:(\s)*((.)*)(;)*Meaning:((.)*)/,2].downcase.gsub("\u00A0", "").chomp(";").chomp("!")
 
