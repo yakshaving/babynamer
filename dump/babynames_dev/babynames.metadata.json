@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "babynames_dev.babynames", "name" : "_id_" } ] }
