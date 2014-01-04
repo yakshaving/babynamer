@@ -65,4 +65,27 @@ namespace :load_data do
 
   end
 
+  desc "loads and scrubs data from babynameguide.com"
+  task :babynameguide => :environment do
+
+    url = "http://babynameguide.com/"
+    doc = Nokogiri::HTML(open(url))
+
+    doc.css('.MenuBarText').each do |element|
+      innerURL = element.css('a')[0]["href"]
+
+      begin
+        innerHTML_page = Nokogiri::HTML(open(innerURL))
+      rescue OpenURI::HTTPError => ex
+        puts "fetch error, 404" + ex.message.to_s
+        next
+      end
+
+      # innerHTML_page.css
+
+
+    end
+
+  end
+
 end

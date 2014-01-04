@@ -1,6 +1,7 @@
 class Babyname
   include Mongoid::Document
   field :name, type: String
+  field :category, type: String
   field :origin, type: String
   field :meaning, type: String
   field :gender, type: String

@@ -1,0 +1,21 @@
+window do
+
+  # run this command before each command.
+  before { run 'cd ~/Sites/babynames' }
+
+  setup do
+   run "bundle install"
+  end
+
+  tab "Server" do
+    run "bundle exec rails s thin"
+  end
+
+  tab "Console" do
+    run "bundle exec rails console"
+  end
+
+  tab "Assets" do
+    run "bundle exec guard -g assets"
+  end
+end
