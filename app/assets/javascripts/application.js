@@ -11,7 +11,15 @@
 // about supported directives.
 //
 //= require jquery
+//= require underscore
+//= require backbone
 //= require jquery_ujs
 //= require turbolinks
-//= require bootstrap
-//= require_tree .
+//
+//= require views/mainView
+//= require models/name
+//= require collections/nameCollection
+//
+//= require babyname
+
+

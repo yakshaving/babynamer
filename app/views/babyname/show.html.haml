@@ -3,23 +3,14 @@
 
 .row
   .main-box
-    .babyname
-      Arya
-    .origin
-      %h2 origin
-      Indian
-    .meaning
-      %h2 meaning
 
-      "Aryan" is an English language loanword derived from the Sanskrit ārya. In present-day academia, the term "Aryan" has been replaced in most cases by the terms "Indo-Iranian" and "Indo-European", and "Aryan" is now mostly limited to its appearance in the term "Indo-Aryan" for Indic languages and ...
+  .actions
+    %a.btn.favorite#favorite{:href=>"javascript:void(0)"}
+      %i.typcn.typcn-heart
+      <br/>
+      Favorite
 
-    .actions
-      %a.btn.favorite{:href=>"#"}
-        %i.typcn.typcn-heart
-        <br/>
-        Favorite
-
-      %a.btn.pass{:href=>"#"}
-        %i.typcn.typcn-arrow-forward
-        <br/>
-        Pass
+    %a.btn.pass#pass{:href=>"javascript:void(0)"}
+      %i.typcn.typcn-arrow-forward
+      <br/>
+      Pass
