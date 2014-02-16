@@ -8,7 +8,7 @@ window do
   end
 
   tab "Server" do
-    run "bundle exec rails s thin"
+    run "bundle exec rails s"
   end
 
   tab "Console" do
