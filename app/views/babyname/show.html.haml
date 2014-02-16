@@ -1,6 +1,19 @@
 - content_for :title do
   About
 
+.row#filters
+  %label Gender
+  %select(data-param='gender')
+    %option{:value=>"any"} Any
+    %option{:value=>"male"} Male
+    %option{:value=>"female"} Female
+
+  %label Category
+  %select(data-param='category')
+    %option{:value=>"any"} Any
+    %option{:value=>"male"} Category
+    %option{:value=>"female"} Ok
+
 .row
   .main-box
 
