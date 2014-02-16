@@ -10,8 +10,7 @@ class BabynameController < ApplicationController
 
   def getnames
 
-    @babynames = Babyname.limit(50)
-
+    @babynames = Babyname.where(category: params['category']).limit(100)
 
     render json: @babynames
 
