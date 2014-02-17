@@ -2,6 +2,7 @@
 # Ignore these files when commiting to a git repository.
 #
 #----------------------------------------------------------------------------
+Termfile
 
 # bundler state
 /.bundle
