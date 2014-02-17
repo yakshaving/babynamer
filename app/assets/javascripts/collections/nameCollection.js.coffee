@@ -6,7 +6,7 @@ class window.NameCollection extends Backbone.Collection
 
     # Anna, this is how you get and set a CoffeeScript
     # constant on a class
-    @BASE_URL: 'localhost:5000/names'
+    @BASE_URL: '/names'
     url: NameCollection.BASE_URL
 
     params:
@@ -36,17 +36,19 @@ class window.NameCollection extends Backbone.Collection
         paramString =
             '?' + paramString.substr(1, paramString.length)
 
-        @url = NameCollection.BASE_URL + paramString
+        # TODO: uncomment this when backend works
+        #@url = NameCollection.BASE_URL + paramString
 
-        @fetch({reset: true})
+        @fetch({ reset: true })
 
-        console.log @url
 
 
 
     ## Take reponse (array of names), and remove those names
     ## that have already been rejected or favorited.
     parse: (res, options) ->
+        console.log res
         # TODO: we need to reject on names, not the whole obj
-        _.without res, App.rejectedNames.toJSON(), App.favoriteNames.toJSON()
+        res = _.without res, App.rejectedNames.toJSON(), App.favoriteNames.toJSON()
+        _.shuffle res
 

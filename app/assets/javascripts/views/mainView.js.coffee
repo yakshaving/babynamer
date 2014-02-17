@@ -8,14 +8,17 @@ class window.MainView extends Backbone.View
     initialize: ->
         @$mainBox = $('.main-box')
 
-        # Let's just render the first model.
-        @render(@collection.first())
+        @listenTo @collection, 'reset', @_next
 
 
     ## Renders a given NameModel
     render: (model) ->
-        @$mainBox.html @template(model.toJSON())
+        @$mainBox.html @_template(model.toJSON())
 
+
+
+
+    #### UI Handlers ####
 
     events:
         'click #pass'     : 'onPassClick'
@@ -26,28 +29,35 @@ class window.MainView extends Backbone.View
     ## When pass button is clicked, render next.
     onPassClick: (e) =>
         App.rejectedNames.add @collection.shift()
-
-        if !@collection.isEmpty()
-            @render(@collection.first())
+        @_next()
 
 
     ## When favorite button is clicked, add model to saved
     ## collection
     onFavoriteClick: (e) =>
         App.favoriteNames.add @collection.shift()
-
-        if !@collection.isEmpty()
-            @render(@collection.first())
+        @_next()
 
 
+    ## When a Filter is changed, update params.
     onFilterChange: (e) =>
         $el = $(e.target)
         App.names.updateFilter($el.attr('data-param'), $el.val())
 
 
+
+
+    #### Helpers ####
+
+    ## If collection has another card, render it!
+    _next: ->
+        if !@collection.isEmpty()
+            @render(@collection.first())
+
+
     ## Compiles JSON to HTML string.
     ## Expects {data: '', origin: ''}, returns string
-    template: (data) ->
+    _template: (data) ->
         """
         <div class='name'>
             <div class='babyname'>#{data.name}</div>
@@ -55,5 +65,6 @@ class window.MainView extends Backbone.View
         </div>
         """
         #<div class='meaning'><h2>#{data.meaning}</h2></div>
+
 
 

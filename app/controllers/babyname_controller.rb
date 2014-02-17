@@ -10,7 +10,7 @@ class BabynameController < ApplicationController
 
   def getnames
 
-    theCategory = params['category'].capitalize
+    theCategory = params['category']#.capitalize
 
     @babynames = Babyname.where(category: theCategory).limit(100)
 

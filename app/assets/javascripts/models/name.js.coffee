@@ -6,3 +6,7 @@ class window.Name extends Backbone.Model
         origin: ''
 
     initialize: ->
+
+    parse: (res) ->
+        res._id = res._id.$oid
+        return res
